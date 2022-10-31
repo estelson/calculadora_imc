@@ -20,8 +20,16 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("Calculadora de IMC"),
         centerTitle: true,
+        backgroundColor: Colors.green,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.refresh,
+            ),
+          ),
+        ],
       ),
     );
   }
-
 }
