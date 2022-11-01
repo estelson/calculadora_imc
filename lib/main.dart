@@ -14,6 +14,41 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  String _infoText = "Informe seus dados!";
+
+  void _resetFields() {
+    weightController.text = "";
+    heightController.text = "";
+    _infoText = "Informe seus dados!";
+  }
+
+  void _calculate() {
+    setState(() {
+      double weight = double.parse(weightController.text);
+      double height = double.parse(heightController.text) / 100;
+      double imc = weight / (height * height);
+
+      if (imc < 18.5) {
+        _infoText = "Abaixo do peso (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 18.5 && imc <= 24.9) {
+        _infoText = "Peso normal (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 25 && imc <= 29.9) {
+        _infoText = "Sobrepeso (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 30 && imc <= 34.9) {
+        _infoText = "Obesidade grau I (${imc.toStringAsPrecision(3)})";
+      } else if (imc >= 35 && imc <= 39.9) {
+        _infoText = "Obesidade grau II (${imc.toStringAsPrecision(3)})";
+      } else {
+        if (imc >= 40) {
+          _infoText = "Obesidade grau III (${imc.toStringAsPrecision(3)})";
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +58,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.green,
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: _resetFields,
             icon: const Icon(
               Icons.refresh,
             ),
@@ -41,35 +76,37 @@ class _HomeState extends State<Home> {
               size: 120,
               color: Colors.green,
             ),
-            const TextField(
+            TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Peso (Kg)",
                 labelStyle: TextStyle(color: Colors.green),
               ),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.green,
                 fontSize: 25,
               ),
+              controller: weightController,
             ),
-            const TextField(
+            TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Altura (cm)",
                   labelStyle: TextStyle(color: Colors.green)),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.green,
                 fontSize: 25,
               ),
+              controller: heightController,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _calculate,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
@@ -83,12 +120,12 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16),
+            Padding(
+              padding: const EdgeInsets.all(16),
               child: Text(
-                "Info",
+                _infoText,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.green,
                   fontSize: 25,
                 ),
